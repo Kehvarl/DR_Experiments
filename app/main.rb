@@ -32,7 +32,8 @@ class Ground_Generate
       elsif h > target_y
         h -= rand(max_change)
       end
-      arr << {x:x, y:0, w:w, h:h, r:128, g:128, b:128}.solid!
+      arr << {x:x, y:0, w:w, h:h, r:64, g:64, b:64}.solid!
+      arr << {x:x, y:h, w:w, h:1, r:0, g:255, b:0}.solid!
     end
     arr
   end
@@ -44,6 +45,7 @@ class Ground_Generate
     if args.inputs.keyboard.key_down.left
       @vx -= 1
     end
+    args.outputs.primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
     args.outputs.primitives << @ground.map do |g|
       g[:x] = (g[:x] - @vx) % 2560
       g
