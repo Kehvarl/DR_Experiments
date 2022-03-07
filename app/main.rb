@@ -1,7 +1,9 @@
 class Ground_Generate
   def initialize args
-    @ground = generate_ground_lines
+    @ground = generate_ground
     ground_render args
+    @last = 'generate_ground'
+    @next = 'generate_ground_lines'
     @x = 0
     @vx = 1
   end
@@ -35,6 +37,8 @@ class Ground_Generate
       end
       arr << {x:x, y:0, w:w, h:h, r:64, g:64, b:64}.solid!
       arr << {x:x, y:h, w:w, h:1, r:0, g:255, b:0}.solid!
+      arr << {x:x+2560, y:0, w:w, h:h, r:64, g:64, b:64}.solid!
+      arr << {x:x+2560, y:h, w:w, h:1, r:0, g:255, b:0}.solid!
     end
     arr
   end
@@ -86,6 +90,13 @@ class Ground_Generate
   end
 
   def tick args
+    if args.inputs.keyboard.key_down.space
+      @ground = send(@next)
+      ground_render args
+      tmp = @last
+      @last = @next
+      @next = tmp
+    end
     if args.inputs.keyboard.key_down.right
       @vx += 1
     end
