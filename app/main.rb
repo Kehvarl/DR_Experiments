@@ -2,10 +2,46 @@ class Ground_Generate
   def initialize args
     @ground = generate_ground
     ground_render args
+    generate_ship args
     @last = 'generate_ground'
     @next = 'generate_ground_lines'
     @x = 0
     @vx = 1
+    @ship_flipped = false
+    @frame = 0
+  end
+
+  def generate_ship args
+    args.outputs[:ship].w = 256
+    args.outputs[:ship].h = 32
+    args.outputs[:ship].background_color = [255, 255, 255, 0]
+    x = 0
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    x += 64
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x+4, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x+4, y2: 16, r: 128, g: 128, b: 128}.line!
+    x += 64
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x+2, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x+2, y2: 16, r: 128, g: 128, b: 128}.line!
+    x += 64
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x, y2: 16, r: 128, g: 128, b: 128}.line!
+
   end
 
   def generate_ground(width=2560, max_h=180, min_h = 5, max_change=5)
@@ -73,7 +109,6 @@ class Ground_Generate
       end
       if width - x <= 100
         arr << {x:x, y:y, x2:width, y2:min_h, r:128, g:128, b:128}.line!
-        #arr << {x:x+2560, y:y, x2:5120, y2:min_h, r:128, g:128, b:128}.line!
         break
       end
     end
@@ -84,9 +119,7 @@ class Ground_Generate
     args.outputs[:ground].w = 5120
     args.outputs[:ground].h = 180
     args.outputs[:ground].primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
-    args.outputs[:ground].primitives << @ground.map do |g|
-      g
-    end
+    args.outputs[:ground].primitives << @ground.map { |g| g }
   end
 
   def tick args
@@ -97,19 +130,21 @@ class Ground_Generate
       @last = @next
       @next = tmp
     end
-    if args.inputs.keyboard.key_down.right
+    if args.inputs.keyboard.key_held.right
       @vx += 1
+      @ship_flipped = false
+      @frame = (@frame + 1) % 3
     end
-    if args.inputs.keyboard.key_down.left
+    if args.inputs.keyboard.key_held.left
       @vx -= 1
+      @ship_flipped = true
+      @frame = (@frame + 1) % 3
+    end
+    if args.inputs.keyboard.keys[:held].length <= 0
+      @frame = 0
     end
     @x = (@x + @vx) % 2560
     args.outputs.primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
-    #args.outputs.primitives << @ground.map do |g|
-    #  g[:x] = (g[:x] - @vx) % 2560
-    #  g[:x2] = (g[:x2] - @vx) % 2560
-    #  g
-    #end
     args.outputs.primitives << {x: 320, y: 629, w: 640, h: 90,
                                 path: :ground,
                                 source_x: 0, source_y: 0,
@@ -119,6 +154,11 @@ class Ground_Generate
                                 path: :ground,
                                 source_x: @x, source_y: 0,
                                 source_w: 1280, source_h: 180}.sprite!
+    args.outputs.primitives << {x: 608, y: 344, w: 64, h: 32,
+                                flip_horizontally: @ship_flipped,
+                                path: :ship,
+                                source_x: @frame * 64, source_y: 0,
+                                source_w: 64, source_h: 32}.sprite!
   end
 end
 
