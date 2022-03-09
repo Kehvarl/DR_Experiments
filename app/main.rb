@@ -117,8 +117,7 @@ class Ground_Generate
 
   def ground_render args
     args.outputs[:ground].w = 5120
-    args.outputs[:ground].h = 180
-    args.outputs[:ground].primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
+    args.outputs[:ground].h = 720
     args.outputs[:ground].primitives << @ground.map { |g| g }
   end
 
@@ -144,21 +143,47 @@ class Ground_Generate
       @frame = 0
     end
     @x = (@x + @vx) % 2560
-    args.outputs.primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
-    args.outputs.primitives << {x: 320, y: 629, w: 640, h: 90,
-                                path: :ground,
+    args.outputs[:scene].primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
+    # Ground
+    args.outputs[:scene].primitives << {x: 0, y: 0, w: 1280, h: 720,
+                                        path: :ground,
+                                        source_x: @x, source_y: 0,
+                                        source_w: 1280, source_h: 720}.sprite!
+    args.outputs[:minimap].primitives << {x: 0, y: 0, w: 2560, h: 720,
+                                          path: :ground,
+                                          source_x: 0, source_y: 0,
+                                          source_w: 2560, source_h: 720}.sprite!
+    # Ship
+    args.outputs[:scene].primitives << {x: 608, y: 344, w: 64, h: 32,
+                                        flip_horizontally: @ship_flipped,
+                                        path: :ship,
+                                        source_x: @frame * 64, source_y: 0,
+                                        source_w: 64, source_h: 32}.sprite!
+    args.outputs[:minimap].primitives << {x: (@x + 608)%2560, y: 344, w: 64, h: 32,
+                                        flip_horizontally: @ship_flipped,
+                                        path: :ship,
+                                        source_x: @frame * 64, source_y: 0,
+                                        source_w: 64, source_h: 32}.sprite!
+
+    args.outputs.primitives << {x: 0, y: 0, w: 1280, h: 720,
+                                path: :scene,
                                 source_x: 0, source_y: 0,
-                                source_w: 2560, source_h: 180}.sprite!
+                                source_w: 1280, source_h: 720}.sprite!
+
+    args.outputs.primitives << {x: 320, y: 629, w: 160, h: 90,
+                                path: :minimap,
+                                source_x: 1920, source_y: 0,
+                                source_w: 640, source_h: 720}.sprite!
+    args.outputs.primitives << {x: 480, y: 629, w: 320, h: 90,
+                                path: :minimap,
+                                source_x: 0, source_y: 0,
+                                source_w: 1280, source_h: 720}.sprite!
+    args.outputs.primitives << {x: 640, y: 629, w: 160, h: 90,
+                                path: :minimap,
+                                source_x: 1280, source_y: 0,
+                                source_w: 640, source_h: 720}.sprite!
+    
     args.outputs.primitives <<{x:319, y:628, w:641, h:91, r:0, g:128, b:0}.border!
-    args.outputs.primitives << {x: 0, y: 0, w: 1280, h: 180,
-                                path: :ground,
-                                source_x: @x, source_y: 0,
-                                source_w: 1280, source_h: 180}.sprite!
-    args.outputs.primitives << {x: 608, y: 344, w: 64, h: 32,
-                                flip_horizontally: @ship_flipped,
-                                path: :ship,
-                                source_x: @frame * 64, source_y: 0,
-                                source_w: 64, source_h: 32}.sprite!
   end
 end
 
