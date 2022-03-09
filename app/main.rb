@@ -81,11 +81,11 @@ class Ground_Generate
 
   def generate_ground_lines(width=2560, max_h=180, min_h = 5, max_change=50)
     arr = []
-    x = 0
+    x = -1
     w = 5
     y = min_h
     target_y = min_h
-    while x + w < width
+    while x + w <= width
       arr << {x:x, y:y, x2:x+w, y2:target_y, r:128, g:128, b:128}.line!
       x += w
       w = [rand(100), (width - x)].min
@@ -130,16 +130,14 @@ class Ground_Generate
       @next = tmp
     end
     if args.inputs.keyboard.key_held.right
-      @vx += 1
+      @vx += 0.1
       @ship_flipped = false
       @frame = (@frame + 1) % 3
-    end
-    if args.inputs.keyboard.key_held.left
-      @vx -= 1
+      elsif args.inputs.keyboard.key_held.left
+      @vx -= 0.1
       @ship_flipped = true
       @frame = (@frame + 1) % 3
-    end
-    if args.inputs.keyboard.keys[:held].length <= 0
+      else
       @frame = 0
     end
     @x = (@x + @vx) % 2560
@@ -182,7 +180,7 @@ class Ground_Generate
                                 path: :minimap,
                                 source_x: 1280, source_y: 0,
                                 source_w: 640, source_h: 720}.sprite!
-    
+
     args.outputs.primitives <<{x:319, y:628, w:641, h:91, r:0, g:128, b:0}.border!
   end
 end
