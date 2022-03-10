@@ -141,6 +141,10 @@ class Ground_Generate
       @frame = 0
     end
     @x = (@x + @vx) % 2560
+    args.outputs[:scene].width = 1280
+    args.outputs[:scene].height = 720
+    args.outputs[:minimap].width = 2560
+    args.outputs[:minimap].height = 720
     args.outputs[:scene].primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
     # Ground
     args.outputs[:scene].primitives << {x: 0, y: 0, w: 1280, h: 720,
@@ -167,21 +171,10 @@ class Ground_Generate
                                 path: :scene,
                                 source_x: 0, source_y: 0,
                                 source_w: 1280, source_h: 720}.sprite!
+    args.outputs.primitives << {x: 380, y: 629, w: 480, h: 90,
+                                path: :minimap}.sprite!
 
-    args.outputs.primitives << {x: 320, y: 629, w: 160, h: 90,
-                                path: :minimap,
-                                source_x: 1920, source_y: 0,
-                                source_w: 640, source_h: 720}.sprite!
-    args.outputs.primitives << {x: 480, y: 629, w: 320, h: 90,
-                                path: :minimap,
-                                source_x: 0, source_y: 0,
-                                source_w: 1280, source_h: 720}.sprite!
-    args.outputs.primitives << {x: 640, y: 629, w: 160, h: 90,
-                                path: :minimap,
-                                source_x: 1280, source_y: 0,
-                                source_w: 640, source_h: 720}.sprite!
-
-    args.outputs.primitives <<{x:319, y:628, w:641, h:91, r:0, g:128, b:0}.border!
+    args.outputs.primitives <<{x:379, y:628, w:481, h:91, r:0, g:128, b:0}.border!
   end
 end
 
