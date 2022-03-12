@@ -6,6 +6,7 @@ class Ground_Generate
     @last = 'generate_ground'
     @next = 'generate_ground_lines'
     @x = 0
+    @y = 360
     @vx = 1
     @ship_flipped = false
     @frame = 0
@@ -129,15 +130,20 @@ class Ground_Generate
       @last = @next
       @next = tmp
     end
-    if args.inputs.keyboard.key_held.right
+    if args.inputs.keyboard.down
+      @y -= 1
+    elsif args.inputs.keyboard.up
+      @y += 1
+    end
+    if args.inputs.keyboard.right
       @vx += 0.1
       @ship_flipped = false
       @frame = (@frame + 1) % 3
-      elsif args.inputs.keyboard.key_held.left
+    elsif args.inputs.keyboard.left
       @vx -= 0.1
       @ship_flipped = true
       @frame = (@frame + 1) % 3
-      else
+    else
       @frame = 0
     end
     @x = (@x + @vx) % 2560
@@ -156,12 +162,12 @@ class Ground_Generate
                                           source_x: 0, source_y: 0,
                                           source_w: 2560, source_h: 720}.sprite!
     # Ship
-    args.outputs[:scene].primitives << {x: 608, y: 344, w: 64, h: 32,
+    args.outputs[:scene].primitives << {x: 608, y: @y, w: 64, h: 32,
                                         flip_horizontally: @ship_flipped,
                                         path: :ship,
                                         source_x: @frame * 64, source_y: 0,
                                         source_w: 64, source_h: 32}.sprite!
-    args.outputs[:minimap].primitives << {x: (@x + 608)%2560, y: 344, w: 64, h: 32,
+    args.outputs[:minimap].primitives << {x: (@x + 608)%2560, y: @y, w: 64, h: 32,
                                         flip_horizontally: @ship_flipped,
                                         path: :ship,
                                         source_x: @frame * 64, source_y: 0,
