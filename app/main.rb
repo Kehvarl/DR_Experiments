@@ -5,6 +5,7 @@ class Ground_Generate
     generate_ship args
     @last = 'generate_ground'
     @next = 'generate_ground_lines'
+    @projectiles = []
     @x = 0
     @y = 360
     @vx = 1
@@ -123,13 +124,14 @@ class Ground_Generate
   end
 
   def tick args
-    if args.inputs.keyboard.key_down.space
+    if args.inputs.keyboard.key_down.tab
       @ground = send(@next)
       ground_render args
       tmp = @last
       @last = @next
       @next = tmp
     end
+
     if args.inputs.keyboard.down
       @y -= 1
     elsif args.inputs.keyboard.up
@@ -146,12 +148,22 @@ class Ground_Generate
     else
       @frame = 0
     end
+    if args.inputs.keyboard.key_down.space
+      if @ship_flipped
+        x = 640
+        v = -16
+      else
+        x = 672
+        v = 16
+      end
+      @projectiles << [x, @y, @ship_flipped, v]
+    end
     @x = (@x + @vx) % 2560
     args.outputs[:scene].width = 1280
     args.outputs[:scene].height = 720
     args.outputs[:minimap].width = 2560
     args.outputs[:minimap].height = 720
-    args.outputs[:scene].primitives <<{x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
+    args.outputs[:scene].primitives << {x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
     # Ground
     args.outputs[:scene].primitives << {x: 0, y: 0, w: 1280, h: 720,
                                         path: :ground,
@@ -181,6 +193,18 @@ class Ground_Generate
                                 path: :minimap}.sprite!
 
     args.outputs.primitives <<{x:379, y:628, w:481, h:91, r:0, g:128, b:0}.border!
+
+    @projectiles.each do |p|
+      p[0] += p[3]
+      if p[2]
+        x2 = p[0]-2
+      else
+        x2 = p[0]+2
+      end
+      args.outputs.primitives << {x:p[0], y:p[1]+15, w:40, h:2, r:128, g:255, b:255}.solid!
+      args.outputs.primitives << {x:x2, y:p[1]+14, w:36, h:4, r:0, g:255, b:0}.solid!
+    end
+    @projectiles = @projectiles.select { |p|  p[0] >0 and p[0] < 1280}
   end
 end
 
