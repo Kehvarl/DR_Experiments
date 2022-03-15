@@ -129,6 +129,24 @@ class Ground_Generate
     args.outputs[:ground].w = 5120
     args.outputs[:ground].h = 720
     args.outputs[:ground].primitives << @ground.map { |g| g }
+
+    args.outputs[:minimap].width = 640
+    args.outputs[:minimap].height = 180
+    args.outputs[:minimap].primitives << @ground.map do |g|
+      t = g.copy
+      if t.x <= 2560
+        t.x = t.x/4
+        t.y = t.y/4
+        if t.x2
+          t.x2 = t.x2/4
+          t.y2 = t.y2/4
+        else
+          t.w = t.w/4
+          t.h = t.h/4
+        end
+        t
+      end
+    end
   end
 
   def tick args
@@ -169,8 +187,6 @@ class Ground_Generate
     @x = (@x + @vx) % 2560
     args.outputs[:scene].width = 1280
     args.outputs[:scene].height = 720
-    args.outputs[:minimap].width = 2560
-    args.outputs[:minimap].height = 720
     args.outputs[:scene].primitives << {x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
     # Ground
     args.outputs[:scene].primitives << {x: 0, y: 0, w: 1280, h: 720,
@@ -189,25 +205,12 @@ class Ground_Generate
                                 source_x: 0, source_y: 0,
                                 source_w: 1280, source_h: 720}.sprite!
 
-    args.outputs.primitives << {x: (@x/6 + 510)%2560, y: @y/4 + 539, w: 12, h: 8,
+    args.outputs.primitives << {x: ((@x + 608)%2496)/4 + 320, y: @y/4 + 539, w: 12, h: 8,
                                           flip_horizontally: @ship_flipped,
                                           path: :mini_ship}.sprite!
 
-    args.outputs.primitives << @ground.map do |g|
-      t = g.copy
-      if t.x <= 2560
-        t.x = t.x/4 + 320
-        t.y = t.y/4 + 539
-        if t.x2
-          t.x2 = t.x2/4 + 320
-          t.y2 = t.y2/4 + 539
-        else
-          t.w = t.w/4
-          t.h = t.h/4
-        end
-        t
-      end
-    end
+    args.outputs.primitives << {x: 320, y: 539, w: 640, h: 180,
+                                path: :minimap}.sprite!
 
     args.outputs.primitives <<{x:319, y:538, w:641, h:181, r:0, g:128, b:0}.border!
 
