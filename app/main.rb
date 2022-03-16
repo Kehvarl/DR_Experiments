@@ -1,3 +1,28 @@
+class Projectile
+  attr_accessor :x, :y, :w, :h, :r, :g, :b, :a, :v, :blendmode_enum
+
+  def initialize opts
+    super
+    @x = opts[:x] || 0
+    @y = opts[:y] || 0
+    @w = opts[:w] || 40
+    @h = opts[:h] || 4
+    @r = opts[:r] || 0
+    @g = opts[:g] || 255
+    @b = opts[:b] || 0
+    @a = opts[:a] || 255
+    @v = opts[:v] || 0
+  end
+
+  def tick args
+    @x += @v
+  end
+
+  def primitive_marker
+    :solid
+  end
+end
+
 class Ground_Generate
   def initialize args
     @ground = generate_ground_lines
@@ -43,6 +68,7 @@ class Ground_Generate
     args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
     args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x, y2: 16, r: 128, g: 128, b: 128}.line!
     args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x, y2: 16, r: 128, g: 128, b: 128}.line!
+
     args.outputs[:mini_ship].w = 12
     args.outputs[:mini_ship].h = 8
     args.outputs[:mini_ship].background_color = [255, 255, 255, 0]
@@ -177,12 +203,12 @@ class Ground_Generate
     if args.inputs.keyboard.key_down.space
       if @ship_flipped
         x = 576
-        v = -16
+        v = -14
       else
         x = 672
-        v = 16
+        v = 14
       end
-      @projectiles << [x, @y, @ship_flipped, v]
+      @projectiles << Projectile.new(x: x, y: @y + 14, v: v)
     end
     @x = (@x + @vx) % 2560
     args.outputs[:scene].width = 1280
@@ -215,18 +241,11 @@ class Ground_Generate
     args.outputs.primitives <<{x:319, y:538, w:641, h:181, r:0, g:128, b:0}.border!
 
 
-
     @projectiles.each do |p|
-      p[0] += p[3]
-      if p[2]
-        x2 = p[0]-2
-      else
-        x2 = p[0]+2
-      end
-      args.outputs.primitives << {x:p[0], y:p[1]+15, w:40, h:2, r:128, g:255, b:255}.solid!
-      args.outputs.primitives << {x:x2, y:p[1]+14, w:36, h:4, r:0, g:255, b:0}.solid!
+      p.tick(args)
+      args.outputs.primitives << p
     end
-    @projectiles = @projectiles.select { |p|  p[0] >0 and p[0] < 1280}
+    @projectiles = @projectiles.select { |p|  p.x >0 and p.x < 1280}
   end
 end
 
