@@ -175,7 +175,7 @@ class Ground_Generate
     end
   end
 
-  def tick args
+  def handle_keys args
     if args.inputs.keyboard.key_down.tab
       @ground = send(@next)
       ground_render args
@@ -189,6 +189,7 @@ class Ground_Generate
     elsif args.inputs.keyboard.up
       @y += 1
     end
+
     if args.inputs.keyboard.right
       @vx += 0.1
       @ship_flipped = false
@@ -200,6 +201,7 @@ class Ground_Generate
     else
       @frame = 0
     end
+
     if args.inputs.keyboard.key_down.space
       if @ship_flipped
         x = 576
@@ -210,6 +212,10 @@ class Ground_Generate
       end
       @projectiles << Projectile.new(x: x, y: @y + 14, v: v)
     end
+  end
+
+  def tick args
+    handle_keys args
     @x = (@x + @vx) % 2560
     args.outputs[:scene].width = 1280
     args.outputs[:scene].height = 720
