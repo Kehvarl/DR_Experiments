@@ -35,6 +35,8 @@ class Ground_Generate
     @y = 360
     @vx = 1
     @ship_flipped = false
+    @ship_btm = {x:  0, y:  0, x2: 63, y2: 16}
+    @ship_top = {x: 32, y:  0, x2: 63, y2: 16}
     @frame = 0
   end
 
