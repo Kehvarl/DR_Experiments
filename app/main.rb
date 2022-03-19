@@ -218,6 +218,7 @@ class Ground_Generate
 
   def tick args
     handle_keys args
+    impact = @ground.select{ |g| args.geometry.line_intersect(@ship_btm, g)}
     @x = (@x + @vx) % 2560
     args.outputs[:scene].width = 1280
     args.outputs[:scene].height = 720
