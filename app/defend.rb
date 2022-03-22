@@ -35,8 +35,6 @@ class Ground_Generate
     @y = 360
     @vx = 1
     @ship_flipped = false
-    @ship_btm = {x:  0, y:  0, x2: 63, y2: 16}
-    @ship_top = {x: 32, y:  0, x2: 63, y2: 16}
     @frame = 0
   end
 
@@ -222,10 +220,7 @@ class Ground_Generate
     end
   end
 
-  def tick args
-    handle_keys args
-
-    @x = (@x + @vx) % 2560
+  def render_scene args
     args.outputs[:scene].width = 1280
     args.outputs[:scene].height = 720
     args.outputs[:scene].primitives << {x:0, y:0, w:1280, h:720, r:0, g:0, b:0}.solid!
@@ -240,21 +235,34 @@ class Ground_Generate
                                         path: :ship,
                                         source_x: @frame * 64, source_y: 0,
                                         source_w: 64, source_h: 32}.sprite!
+  end
 
+  def render args
+    # Draw Scene
     args.outputs.primitives << {x: 0, y: 0, w: 1280, h: 720,
                                 path: :scene,
                                 source_x: 0, source_y: 0,
                                 source_w: 1280, source_h: 720}.sprite!
 
+    # Draw Minimap
+    # Minimap Ship
     args.outputs.primitives << {x: ((@x + 608)%2496)/4 + 320, y: @y/4 + 560, w: 12, h: 8,
-                                          flip_horizontally: @ship_flipped,
-                                          path: :mini_ship}.sprite!
+                                flip_horizontally: @ship_flipped,
+                                path: :mini_ship}.sprite!
 
+    # Minimap
     args.outputs.primitives << {x: 320, y: 560, w: 640, h: 160,
                                 path: :minimap}.sprite!
-
+    # Minimap Border
     args.outputs.primitives <<{x:319, y:559, w:641, h:161, r:0, g:128, b:0}.border!
+  end
 
+  def tick args
+    handle_keys args
+
+    @x = (@x + @vx) % 2560
+    render_scene args
+    render args
 
     @projectiles.each do |p|
       p.tick(args)
