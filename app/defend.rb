@@ -259,7 +259,6 @@ class Ground_Generate
 
   def tick args
     handle_keys args
-
     @x = (@x + @vx) % 2560
     render_scene args
     render args
