@@ -23,6 +23,33 @@ class Projectile
   end
 end
 
+class Enemy
+  attr_accessor :x, :y, :w, :h, :r, :g, :b, :a, :v, :blendmode_enum
+
+  def initialize opts
+    super
+    @x  = opts[:x]  ||   0
+    @y  = opts[:y]  ||   0
+    @w  = opts[:w]  ||  16
+    @h  = opts[:h]  ||  16
+    @r  = opts[:r]  ||   0
+    @g  = opts[:g]  || 128
+    @b  = opts[:b]  || 128
+    @a  = opts[:a]  || 255
+    @vx = opts[:vx] ||   0
+    @vy = opts[:vy] ||   0
+  end
+
+  def tick args
+    @x += @vx
+    @y += @vy
+  end
+
+  def primitive_marker
+    :solid
+  end
+end
+
 class Ground_Generate
   def initialize args
     @ground = generate_ground_lines
@@ -31,11 +58,13 @@ class Ground_Generate
     @last = 'generate_ground'
     @next = 'generate_ground_lines'
     @projectiles = []
+    @enemies = []
     @x = 0
     @y = 360
     @vx = 1
     @ship_flipped = false
     @frame = 0
+    @enemies << Enemy.new(x: rand(max=2560), y: rand(max=540))
   end
 
   def generate_ship args
@@ -267,6 +296,9 @@ class Ground_Generate
       p.tick(args)
       args.outputs.primitives << p
     end
+    @enemies.each { |e| e.tick args }
     @projectiles = @projectiles.select { |p|  p.x >0 and p.x < 1280}
+
+    args.outputs.primitives << @enemies.map { |e| e }
   end
 end
