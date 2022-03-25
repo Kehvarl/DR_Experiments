@@ -205,6 +205,9 @@ class Ground_Generate
   end
 
   def handle_keys args
+    if args.inputs.keyboard.key_down.one
+      @enemies << Enemy.new(x: rand(max=2560), y: rand(max=540))
+    end
     if args.inputs.keyboard.key_down.tab
       @ground = send(@next)
       ground_render args
@@ -264,6 +267,9 @@ class Ground_Generate
                                         path: :ship,
                                         source_x: @frame * 64, source_y: 0,
                                         source_w: 64, source_h: 32}.sprite!
+    args.outputs[:scene].primitives << @enemies.select{|e| e.x >= (@x - 32) and e.x <= (@x + 1280) }.map do |e|
+      e
+    end
   end
 
   def render args
@@ -292,13 +298,11 @@ class Ground_Generate
     render_scene args
     render args
 
-    @projectiles.each do |p|
-      p.tick(args)
-      args.outputs.primitives << p
-    end
+    @projectiles.each { |p| p.tick args }
     @enemies.each { |e| e.tick args }
     @projectiles = @projectiles.select { |p|  p.x >0 and p.x < 1280}
 
-    args.outputs.primitives << @enemies.map { |e| e }
+    args.outputs.primitives << @projectiles.map { |p| p }
+
   end
 end
