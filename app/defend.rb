@@ -267,9 +267,15 @@ class Ground_Generate
                                         path: :ship,
                                         source_x: @frame * 64, source_y: 0,
                                         source_w: 64, source_h: 32}.sprite!
-    args.outputs[:scene].primitives << @enemies.select{|e| e.x >= (@x - 32) and e.x <= (@x + 1280) }.map do |e|
-      e
+    @enemies.each do |e|
+      if e.x%2560 >= (@x%2560) and e.x%2560 <= (@x + 1280)%2560
+        t = e.clone
+        t.x -= @x
+        t.x = t.x % 1280
+        args.outputs[:scene].primitives << t
+      end
     end
+    args.outputs[:scene].primitives << {x: 0, y: 700, w: 64, h: 32, text: @x, r: 255}.label!
   end
 
   def render args
