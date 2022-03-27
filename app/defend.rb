@@ -67,7 +67,6 @@ class Defender
   def initialize args
     @ground = generate_ground_lines
     ground_render args
-    generate_ship args
     @last = 'generate_ground'
     @next = 'generate_ground_lines'
     @projectiles = []
@@ -78,19 +77,6 @@ class Defender
     @ship_flipped = false
     @frame = 0
     @enemies << Enemy.new(x: rand(max=2560), y: rand(max=540))
-  end
-
-  def generate_ship args
-    args.outputs[:ship].w = 256
-    args.outputs[:ship].h = 32
-    args.outputs[:ship].background_color = [255, 255, 255, 0]
-    args.outputs[:ship].primitives << {x:0, y:0, w: 256, h: 32, path: 'sprites/sheet.png'}.sprite!
-
-    args.outputs[:mini_ship].w = 12
-    args.outputs[:mini_ship].h = 8
-    args.outputs[:mini_ship].background_color = [255, 255, 255, 0]
-    x = 0
-    args.outputs[:mini_ship].primitives << {x: x, y: 0, w: 12, h: 7, path: 'sprites/mini_ship.png'}.sprite!
   end
 
   def generate_ground(width=2560, max_h=180, min_h = 5, max_change=5)
@@ -249,7 +235,7 @@ class Defender
     # Ship
     args.outputs[:scene].primitives << {x: 608, y: @y, w: 64, h: 32,
                                         flip_horizontally: @ship_flipped,
-                                        path: :ship,
+                                        path: 'sprites/sheet.png',
                                         source_x: @frame * 64, source_y: 0,
                                         source_w: 64, source_h: 32}.sprite!
     @enemies.each do |e|
@@ -274,7 +260,7 @@ class Defender
     # Minimap Ship
     args.outputs.primitives << {x: ((@x + 608)%2496)/4 + 320, y: @y/4 + 560, w: 12, h: 8,
                                 flip_horizontally: @ship_flipped,
-                                path: :mini_ship}.sprite!
+                                path: 'sprites/mini_ship.png'}.sprite!
 
     # Minimap
     args.outputs.primitives << {x: 320, y: 560, w: 640, h: 160,
