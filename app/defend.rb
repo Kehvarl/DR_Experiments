@@ -84,41 +84,13 @@ class Defender
     args.outputs[:ship].w = 256
     args.outputs[:ship].h = 32
     args.outputs[:ship].background_color = [255, 255, 255, 0]
-    x = 0
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    x += 64
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x+4, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x+4, y2: 16, r: 128, g: 128, b: 128}.line!
-    x += 64
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x+2, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x+2, y2: 16, r: 128, g: 128, b: 128}.line!
-    x += 64
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+63, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y:  0, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x, y: 32, x2: x+16, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x+8, y:  8, x2: x, y2: 16, r: 128, g: 128, b: 128}.line!
-    args.outputs[:ship].primitives << {x: x+8, y: 24, x2: x, y2: 16, r: 128, g: 128, b: 128}.line!
+    args.outputs[:ship].primitives << {x:0, y:0, w: 256, h: 32, path: 'sprites/sheet.png'}.sprite!
 
     args.outputs[:mini_ship].w = 12
     args.outputs[:mini_ship].h = 8
     args.outputs[:mini_ship].background_color = [255, 255, 255, 0]
     x = 0
-    args.outputs[:mini_ship].primitives << {x: x, y: 0, x2: x+12, y2: 4, r: 128, g: 128, b: 128}.line!
-    args.outputs[:mini_ship].primitives << {x: x, y: 8, x2: x+12, y2: 4, r: 128, g: 128, b: 128}.line!
-    args.outputs[:mini_ship].primitives << {x: x, y: 0, x2: x+ 4, y2: 4, r: 128, g: 128, b: 128}.line!
-    args.outputs[:mini_ship].primitives << {x: x, y: 8, x2: x+ 4, y2: 4, r: 128, g: 128, b: 128}.line!
+    args.outputs[:mini_ship].primitives << {x: x, y: 0, w: 12, h: 7, path: 'sprites/mini_ship.png'}.sprite!
   end
 
   def generate_ground(width=2560, max_h=180, min_h = 5, max_change=5)
