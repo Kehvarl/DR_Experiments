@@ -239,10 +239,10 @@ class Defender
                                         source_x: @frame * 64, source_y: 0,
                                         source_w: 64, source_h: 32}.sprite!
     @enemies.each do |e|
-      if e.x%2560 >= (@x%2560) and e.x%2560 <= (@x + 1280)%2560
+      if e.x>= @x and e.x<= (@x + 1280)
         t = e.clone
-        t.x -= @x
-        t.x = t.x % 1280
+        #t.x -= @x
+        #t.x = t.x
         args.outputs[:scene].primitives << t
       end
     end
