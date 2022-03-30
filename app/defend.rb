@@ -267,6 +267,7 @@ class Defender
                                 path: :minimap}.sprite!
     # Minimap Border
     args.outputs.primitives <<{x:319, y:559, w:641, h:161, r:0, g:128, b:0}.border!
+    
   end
 
   def tick args
