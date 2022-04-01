@@ -50,21 +50,6 @@ class Enemy
   end
 end
 
-class Scene
-  attr_accessor :w, :h, :background, :entities
-  def initialize opts
-    super
-    @w  = opts[:w]  ||  2560
-    @h  = opts[:h]  ||  720
-  end
-
-  def render
-    arr = []
-
-    arr
-  end
-end
-
 class Defender
   def initialize args
     @ground = generate_ground_lines
