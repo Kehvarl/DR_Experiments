@@ -268,6 +268,5 @@ class Defender
     @projectiles = @projectiles.select { |p|  p.x >0 and p.x < 1280}
 
     args.outputs.primitives << @projectiles.map { |p| p }
-
   end
 end
