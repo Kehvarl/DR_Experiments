@@ -63,7 +63,6 @@ class Defender
     @vx = 1
     @ship_flipped = false
     @frame = 0
-    @enemies << Enemy.new(x: rand(max=2560), y: rand(max=540))
   end
 
   def generate_ground(width=2560, max_h=180, min_h = 5, max_change=5)
@@ -131,7 +130,7 @@ class Defender
       end
       if width - x <= 100
         arr << {x:x, y:y, x2:width, y2:min_h, r:128, g:128, b:128}.line!
-        arr << {x:x, y:y, x2:width, y2:min_h, r:128, g:128, b:128}.line!
+        #arr << {x:x, y:y, x2:3840, y2:min_h, r:128, g:128, b:128}.line!
         break
       end
     end
@@ -164,7 +163,10 @@ class Defender
 
   def handle_keys args
     if args.inputs.keyboard.key_down.one
-      @enemies << Enemy.new(x: rand(max=2560), y: rand(max=540))
+      x = rand(max=2560)
+      y = rand(max=540)
+      @enemies << Enemy.new(x: x, y: y)
+      @enemies << Enemy.new(x: x+2560, y: y)
     end
     if args.inputs.keyboard.key_down.tab
       @ground = send(@next)
@@ -228,8 +230,7 @@ class Defender
     @enemies.each do |e|
       if e.x>= @x and e.x<= (@x + 1280)
         t = e.clone
-        #t.x -= @x
-        #t.x = t.x
+        t.x -= @x
         args.outputs[:scene].primitives << t
       end
     end
