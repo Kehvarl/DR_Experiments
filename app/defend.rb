@@ -256,6 +256,9 @@ class Defender
     # Minimap Border
     args.outputs.primitives <<{x:319, y:559, w:641, h:161, r:0, g:128, b:0}.border!
 
+    # Projectiles
+    args.outputs.primitives << @projectiles.map { |p| p }
+
   end
 
   def tick args
@@ -267,7 +270,5 @@ class Defender
     @projectiles.each { |p| p.tick args }
     @enemies.each { |e| e.tick args }
     @projectiles = @projectiles.select { |p|  p.x >0 and p.x < 1280}
-
-    args.outputs.primitives << @projectiles.map { |p| p }
   end
 end
