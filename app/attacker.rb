@@ -56,3 +56,7 @@ class Enemy
     :solid
   end
 end
+
+class Attacker
+  
+end
