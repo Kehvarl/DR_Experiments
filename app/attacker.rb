@@ -58,5 +58,5 @@ class Enemy
 end
 
 class Attacker
-  
+
 end
