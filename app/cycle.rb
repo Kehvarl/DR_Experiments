@@ -2,15 +2,19 @@ class Cycle
   attr_accessor :x, :y, :vx, :vy
   def initialize args
     super
-    @x = 640
-    @y = 480
+    @x = 60
+    @y = 45
     @vx = 0
     @vy = 0
-    @tiles = Array.new(120){Array.new(160, 0)}
-    @tiles[rand(120)][rand(160)] = rand(128)+128
-    @tiles[rand(120)][rand(160)] = rand(128)+128
-    @tiles[rand(120)][rand(160)] = rand(128)+128
-    @tiles[rand(120)][rand(160)] = rand(128)+128
+    @tiles = Array.new(90){Array.new(160, 0)}
+    for x in 0..159
+    @tiles[0][x] = 255
+    @tiles[89][x] = 255
+    end
+    for y in 0..89
+      @tiles[y][0] = 255
+      @tiles[y][159] = 255
+    end
   end
 
   def render
@@ -37,14 +41,16 @@ class Cycle
   end
 
   def tick args
+    @tiles[@y][@x] = 64
     handle_keys args
     @x += @vx
     @y += @vy
-    args.outputs.solids << {x: @x, y: @y, w: 24, h: 32, r:128, g:0, b:128}
-    for y in 0..119
+
+    for y in 0..89
       for x in 0..159
         args.outputs.solids << {x: x*8, y: y*8, w: 8, h: 8, r:@tiles[y][x], g:0, b:0}
       end
     end
+    args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
   end
 end
