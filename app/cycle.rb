@@ -40,11 +40,18 @@ class Cycle
     end
   end
 
-  def tick args
+  def game_tick args
     @tiles[@y][@x] = 64
     handle_keys args
     @x += @vx
     @y += @vy
+    if @vx == 0 and @vy == 0
+      return
+    end
+    if @tiles[y][x] > 0
+      args.state.game = :game_over
+      return
+    end
 
     for y in 0..89
       for x in 0..159
@@ -52,5 +59,18 @@ class Cycle
       end
     end
     args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
+  end
+
+  def game_over_tick args
+    args.outputs.labels << {x: 600, y: 360, text: "Game Over"}
+  end
+
+  def tick args
+    case args.state.game
+    when :running
+      game_tick args
+    when :game_over
+      game_over_tick args
+    end
   end
 end
