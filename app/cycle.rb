@@ -62,6 +62,14 @@ class Cycle
   end
 
   def game_over_tick args
+    for y in 0..89
+      for x in 0..159
+        args.outputs.solids << {x: x*8, y: y*8, w: 8, h: 8, r:@tiles[y][x], g:0, b:0}
+      end
+    end
+    args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
+    args.outputs.borders << {x: 560, y: 300, w: 180, h: 100, r:0, g:192, b:128}
+    args.outputs.solids << {x: 560, y: 300, w: 180, h: 100, r:128, g:128, b:128}
     args.outputs.labels << {x: 600, y: 360, text: "Game Over"}
   end
 
