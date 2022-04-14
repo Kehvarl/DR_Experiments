@@ -71,6 +71,24 @@ class Cycle
     args.outputs.borders << {x: 560, y: 300, w: 180, h: 100, r:0, g:192, b:128}
     args.outputs.solids << {x: 560, y: 300, w: 180, h: 100, r:128, g:128, b:128}
     args.outputs.labels << {x: 600, y: 360, text: "Game Over"}
+    args.outputs.labels << {x: 600, y: 340, text: "Press Space To Start."}
+
+    if args.inputs.keyboard.space
+      @x = 60
+      @y = 45
+      @vx = 0
+      @vy = 0
+      @tiles = Array.new(90){Array.new(160, 0)}
+      for x in 0..159
+        @tiles[0][x] = 255
+        @tiles[89][x] = 255
+      end
+      for y in 0..89
+        @tiles[y][0] = 255
+        @tiles[y][159] = 255
+      end
+      args.state.game = :running
+    end
   end
 
   def tick args
