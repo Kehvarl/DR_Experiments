@@ -52,7 +52,6 @@ class Cycle
       args.state.game = :game_over
       return
     end
-
     for y in 0..89
       for x in 0..159
         args.outputs.solids << {x: x*8, y: y*8, w: 8, h: 8, r:@tiles[y][x], g:0, b:0}
