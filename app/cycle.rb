@@ -2,19 +2,24 @@ class Cycle
   attr_accessor :x, :y, :vx, :vy
   def initialize args
     super
+    game_reset
+  end
+
+  def game_reset
     @x = 60
     @y = 45
     @vx = 0
     @vy = 0
     @tiles = Array.new(90){Array.new(160, 0)}
     for x in 0..159
-    @tiles[0][x] = 255
-    @tiles[89][x] = 255
+      @tiles[0][x] = 255
+      @tiles[89][x] = 255
     end
     for y in 0..89
       @tiles[y][0] = 255
       @tiles[y][159] = 255
     end
+    args.state.game = :running
   end
 
   def render
@@ -73,20 +78,7 @@ class Cycle
     args.outputs.labels << {x: 600, y: 340, text: "Press Space To Start."}
 
     if args.inputs.keyboard.space
-      @x = 60
-      @y = 45
-      @vx = 0
-      @vy = 0
-      @tiles = Array.new(90){Array.new(160, 0)}
-      for x in 0..159
-        @tiles[0][x] = 255
-        @tiles[89][x] = 255
-      end
-      for y in 0..89
-        @tiles[y][0] = 255
-        @tiles[y][159] = 255
-      end
-      args.state.game = :running
+      game_reset
     end
   end
 
