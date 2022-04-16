@@ -67,8 +67,8 @@ class Cycle
       end
     end
     args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
-    args.outputs.borders << {x: 560, y: 300, w: 180, h: 100, r:0, g:192, b:128}
-    args.outputs.solids << {x: 560, y: 300, w: 180, h: 100, r:128, g:128, b:128}
+    args.outputs.borders << {x: 560, y: 300, w: 300, h: 100, r:0, g:192, b:128}
+    args.outputs.solids << {x: 560, y: 300, w: 300, h: 100, r:128, g:128, b:128}
     args.outputs.labels << {x: 600, y: 360, text: "Game Over"}
     args.outputs.labels << {x: 600, y: 340, text: "Press Space To Start."}
 
