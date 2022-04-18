@@ -2,14 +2,18 @@ class Cycle
   attr_accessor :x, :y, :vx, :vy
   def initialize args
     super
-    game_reset
+    game_reset args
   end
 
-  def game_reset
+  def game_reset args
     @x = 60
     @y = 45
     @vx = 0
     @vy = 0
+    @x2 = 80
+    @y2 = 45
+    @vx2 = 0
+    @vy2 = 0
     @tiles = Array.new(90){Array.new(160, 0)}
     for x in 0..159
       @tiles[0][x] = 255
@@ -50,6 +54,8 @@ class Cycle
     handle_keys args
     @x += @vx
     @y += @vy
+    @x2 += @vx2
+    @y2 += @vy2
     if @vx == 0 and @vy == 0
       return
     end
@@ -63,6 +69,7 @@ class Cycle
       end
     end
     args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
+    args.outputs.solids << {x: @x2*8, y: @y2*8, w: 8, h: 8, r:0, g:128, b:128}
   end
 
   def game_over_tick args
@@ -78,7 +85,7 @@ class Cycle
     args.outputs.labels << {x: 600, y: 340, text: "Press Space To Start."}
 
     if args.inputs.keyboard.space
-      game_reset
+      game_reset args
     end
   end
 
