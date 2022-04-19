@@ -49,16 +49,43 @@ class Cycle
     end
   end
 
+  def handle_ai args
+    if @vx2 == 0 and @vy2 == 0
+      case rand(max=4)
+      when 0
+        @vx2 = 1
+      when 1
+        @vx2 = -1
+      when 2
+        @vy2 = 1
+      when 3
+        @vy2 = -1
+      end
+    else
+      if @tiles[@y2 + @vy2][@x2 + @vx2] > 0
+        if @vx2 != 0
+          @vx2 = 0
+          @vy2 = [-1,1].sample
+        else
+          @vx2 = [-1,1].sample
+          @vy2 = 0
+        end
+      end
+    end
+  end
+
   def game_tick args
     @tiles[@y][@x] = 64
+    @tiles[@y2][@x2] = 128
     handle_keys args
     @x += @vx
     @y += @vy
-    @x2 += @vx2
-    @y2 += @vy2
     if @vx == 0 and @vy == 0
       return
     end
+    handle_ai args
+    @x2 += @vx2
+    @y2 += @vy2
     if @tiles[y][x] > 0
       args.state.game = :game_over
       return
