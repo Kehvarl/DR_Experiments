@@ -62,7 +62,10 @@ class Cycle
         @vy2 = -1
       end
     else
-      while @tiles[@y2 + @vy2][@x2 + @vx2] > 0
+      # get allowable turns
+      # choose one
+      # 
+      if @tiles[@y2 + @vy2][@x2 + @vx2] > 0
         if @vx2 != 0
           @vx2 = 0
           @vy2 = [-1,1].sample
