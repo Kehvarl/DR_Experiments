@@ -64,7 +64,6 @@ class Cycle
     else
       # get allowable turns
       # choose one
-      # 
       if @tiles[@y2 + @vy2][@x2 + @vx2] > 0
         if @vx2 != 0
           @vx2 = 0
