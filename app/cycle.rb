@@ -49,6 +49,21 @@ class Cycle
     end
   end
 
+  def get_neighbors x, y
+    open_tiles = []
+    for ty in [-1,1]
+      if @tiles[y+ty][x] == 0
+        open_tiles << [0,ty]
+      end
+    end
+    for tx in [-1,1]
+      if @tiles[y][x+tx] == 0
+        open_tiles << [tx, 0]
+      end
+    end
+    open_tiles
+  end
+
   def handle_ai args
     if @vx2 == 0 and @vy2 == 0
       case rand(max=4)
@@ -64,13 +79,16 @@ class Cycle
     else
       # get allowable turns
       # choose one
-      if @tiles[@y2 + @vy2][@x2 + @vx2] > 0
-        if @vx2 != 0
-          @vx2 = 0
-          @vy2 = [-1,1].sample
+      if @tiles[@y2 + @vy2][@x2 + @vx2] > 0 or
+        (@y2 + @vy2) < 0 or (@y2 + @vy2) > 89  or
+        (@x2 + @vx2) < 0 or (@x2 + @vx2) > 159
+        open_tiles = get_neighbors @x2, @y2
+        if open_tiles.length > 0
+          tmp = open_tiles.sample
+          @vx2 = tmp[0]
+          @vy2 = tmp[1]
         else
-          @vx2 = [-1,1].sample
-          @vy2 = 0
+          args.state.game = :game_over
         end
       end
     end
