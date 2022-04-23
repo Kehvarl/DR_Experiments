@@ -6,23 +6,29 @@ class Cycle
   end
 
   def game_reset args
-    @x = 60
-    @y = 45
+    @dw = 160
+    @dh = 90
+    @scale = 0.8
+    @w = @dw * @scale
+    @h = @dh * @scale
+    @s = 8* (160/@w)
+    @x = (@w/3)
+    @y = (@h/2)
     @vx = 0
     @vy = 0
-    @x2 = 80
-    @y2 = 45
+    @x2 = (@w/3 * 2)
+    @y2 = (@h/2)
     @vx2 = 0
     @vy2 = 0
     @vc2 = 30
-    @tiles = Array.new(90){Array.new(160, 0)}
-    for x in 0..159
+    @tiles = Array.new(@h){Array.new(@w, 0)}
+    for x in 0..(@w-1)
       @tiles[0][x] = 255
-      @tiles[89][x] = 255
+      @tiles[@h-1][x] = 255
     end
-    for y in 0..89
+    for y in 0..(@h-1)
       @tiles[y][0] = 255
-      @tiles[y][159] = 255
+      @tiles[y][@w-1] = 255
     end
     args.state.game = :running
   end
@@ -82,8 +88,8 @@ class Cycle
       # get allowable turns
       # choose one
       if @tiles[@y2 + @vy2][@x2 + @vx2] > 0 or
-        (@y2 + @vy2) < 0 or (@y2 + @vy2) > 89  or
-        (@x2 + @vx2) < 0 or (@x2 + @vx2) > 159 or
+        (@y2 + @vy2) < 0 or (@y2 + @vy2) > (@h-1)  or
+        (@x2 + @vx2) < 0 or (@x2 + @vx2) > (@w-1) or
         @vc2 <= 0
         open_tiles = get_neighbors @x2, @y2
         if open_tiles.length > 0
@@ -96,6 +102,16 @@ class Cycle
         @vc2 = rand(10) + 20
       end
     end
+  end
+
+  def render_screen args
+    for y in 0..(@h-1)
+      for x in 0..(@w-1)
+        args.outputs.solids << {x: x*@s, y: y*@s, w: @s, h: @s, r:@tiles[y][x], g:0, b:0}
+      end
+    end
+    args.outputs.solids << {x: @x*@s, y: @y*@s, w: @s, h: @s, r:128, g:0, b:128}
+    args.outputs.solids << {x: @x2*@s, y: @y2*@s, w: @s, h: @s, r:0, g:128, b:128}
   end
 
   def game_tick args
@@ -114,22 +130,11 @@ class Cycle
       args.state.game = :game_over
       return
     end
-    for y in 0..89
-      for x in 0..159
-        args.outputs.solids << {x: x*8, y: y*8, w: 8, h: 8, r:@tiles[y][x], g:0, b:0}
-      end
-    end
-    args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
-    args.outputs.solids << {x: @x2*8, y: @y2*8, w: 8, h: 8, r:0, g:128, b:128}
+    render_screen args
   end
 
   def game_over_tick args
-    for y in 0..89
-      for x in 0..159
-        args.outputs.solids << {x: x*8, y: y*8, w: 8, h: 8, r:@tiles[y][x], g:0, b:0}
-      end
-    end
-    args.outputs.solids << {x: @x*8, y: @y*8, w: 8, h: 8, r:128, g:0, b:128}
+    render_screen args
     args.outputs.borders << {x: 560, y: 300, w: 300, h: 100, r:0, g:192, b:128}
     args.outputs.solids << {x: 560, y: 300, w: 300, h: 100, r:128, g:128, b:128}
     args.outputs.labels << {x: 600, y: 360, text: "Game Over"}
