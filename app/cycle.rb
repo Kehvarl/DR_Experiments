@@ -14,6 +14,7 @@ class Cycle
     @y2 = 45
     @vx2 = 0
     @vy2 = 0
+    @vc2 = 30
     @tiles = Array.new(90){Array.new(160, 0)}
     for x in 0..159
       @tiles[0][x] = 255
@@ -65,6 +66,7 @@ class Cycle
   end
 
   def handle_ai args
+    @vc2 -=1
     if @vx2 == 0 and @vy2 == 0
       case rand(max=4)
       when 0
@@ -81,7 +83,8 @@ class Cycle
       # choose one
       if @tiles[@y2 + @vy2][@x2 + @vx2] > 0 or
         (@y2 + @vy2) < 0 or (@y2 + @vy2) > 89  or
-        (@x2 + @vx2) < 0 or (@x2 + @vx2) > 159
+        (@x2 + @vx2) < 0 or (@x2 + @vx2) > 159 or
+        @vc2 <= 0
         open_tiles = get_neighbors @x2, @y2
         if open_tiles.length > 0
           tmp = open_tiles.sample
@@ -90,6 +93,7 @@ class Cycle
         else
           args.state.game = :game_over
         end
+        @vc2 = rand(10) + 20
       end
     end
   end
