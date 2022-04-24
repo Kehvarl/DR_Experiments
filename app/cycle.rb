@@ -9,8 +9,8 @@ class Cycle
     @dw = 160
     @dh = 90
     @scale = 0.8
-    @w = @dw * @scale
-    @h = @dh * @scale
+    @w = (@dw * @scale).to_i
+    @h = (@dh * @scale).to_i
     @s = 8* (160/@w)
     @x = (@w/3)
     @y = (@h/2)
@@ -107,11 +107,11 @@ class Cycle
   def render_screen args
     for y in 0..(@h-1)
       for x in 0..(@w-1)
-        args.outputs.solids << {x: x*@s, y: y*@s, w: @s, h: @s, r:@tiles[y][x], g:0, b:0}
+        args.outputs.solids << {x: (x*@s).to_i, y: (y*@s).to_i, w: @s, h: @s, r:@tiles[y][x], g:0, b:0}
       end
     end
-    args.outputs.solids << {x: @x*@s, y: @y*@s, w: @s, h: @s, r:128, g:0, b:128}
-    args.outputs.solids << {x: @x2*@s, y: @y2*@s, w: @s, h: @s, r:0, g:128, b:128}
+    args.outputs.solids << {x: (@x*@s).to_i, y: (@y*@s).to_i, w: @s, h: @s, r:128, g:0, b:128}
+    args.outputs.solids << {x: (@x2*@s).to_i, y: (@y2*@s).to_i, w: @s, h: @s, r:0, g:128, b:128}
   end
 
   def game_tick args
@@ -135,10 +135,12 @@ class Cycle
 
   def game_over_tick args
     render_screen args
-    args.outputs.borders << {x: 560, y: 300, w: 300, h: 100, r:0, g:192, b:128}
-    args.outputs.solids << {x: 560, y: 300, w: 300, h: 100, r:128, g:128, b:128}
-    args.outputs.labels << {x: 600, y: 360, text: "Game Over"}
-    args.outputs.labels << {x: 600, y: 340, text: "Press Space To Start."}
+    w, h = args.gtk.calcstringbox("Press Space To Start.",0)
+
+    args.outputs.borders << {x: 560, y: 300, w: w+20, h: 2*h+25, r:0, g:192, b:128}
+    args.outputs.solids << {x: 560, y: 300, w: w+20, h: 2*h+25, r:128, g:128, b:128}
+    args.outputs.labels << {x: 570, y: 355, text: "Game Over"}
+    args.outputs.labels << {x: 570, y: 335, text: "Press Space To Start."}
 
     if args.inputs.keyboard.space
       game_reset args
