@@ -1,3 +1,2 @@
-require 'app/defend.rb'
-require 'app/cycle.rb'
+require 'app/snake.rb'
 require 'app/tick.rb'
