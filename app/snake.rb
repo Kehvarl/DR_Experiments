@@ -14,6 +14,9 @@ class Snake
     @vx = 0
     @vy = 0
     @tiles = Array.new(@h){Array.new(@w, 0)}
+    @snake = Array.new()
+    @length = 3
+
     for x in 0..(@w-1)
       @tiles[0][x] = 255
       @tiles[@h-1][x] = 255
@@ -49,14 +52,23 @@ class Snake
         args.outputs.solids << {x: (x*@s).to_i, y: (y*@s).to_i, w: @s, h: @s, r:@tiles[y][x], g:0, b:0}
       end
     end
-    args.outputs.solids << {x: (@x*@s).to_i, y: (@y*@s).to_i, w: @s, h: @s, r:128, g:0, b:128}
+    for c in @snake
+      args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:128, g:0, b:128}
+    end
   end
 
   def game_tick args
-    @tiles[@y][@x] = 64
+    #@tiles[@y][@x] = 64
     handle_keys args
     @x += @vx
     @y += @vy
+    @snake << [@x, @y]
+    if rand(32) == 31
+      @length += 1
+    end
+    while @snake.length > @length
+      @snake.shift()
+    end
     if @vx == 0 and @vy == 0
       return
     end
