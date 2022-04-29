@@ -55,28 +55,30 @@ class Snake
     for c in @snake
       args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:128, g:0, b:128}
     end
+    c = @snake[-1]
+    args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:255, g:0, b:255}
   end
 
   def game_tick args
-    #@tiles[@y][@x] = 64
     handle_keys args
     @x += @vx
     @y += @vy
-    @snake << [@x, @y]
     if rand(32) == 31
       @length += 1
     end
-    while @snake.length > @length
+    while @snake.length+1 > @length
       @snake.shift()
     end
     if @vx == 0 and @vy == 0
       return
     end
 
-    if @tiles[y][x] > 0
+    if @tiles[@y][@x] > 0 or @snake.select { |s| s[0]==@x and s[1]==@y }.length > 0
       args.state.game = :game_over
       return
     end
+    @snake << [@x, @y]
+
     render_screen args
   end
 
