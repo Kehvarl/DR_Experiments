@@ -105,4 +105,3 @@ class Snake
     end
   end
 end
-
