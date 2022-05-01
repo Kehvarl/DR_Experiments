@@ -15,7 +15,7 @@ class Snake
     @vy = 0
     @tiles = Array.new(@h){Array.new(@w, 0)}
     @snake = Array.new()
-    @length = 3
+    @length = 5
 
     for x in 0..(@w-1)
       @tiles[0][x] = 255
@@ -63,7 +63,7 @@ class Snake
     handle_keys args
     @x += @vx
     @y += @vy
-    if rand(32) == 31
+    if rand(32) > 20
       @length += 1
     end
     while @snake.length+1 > @length
