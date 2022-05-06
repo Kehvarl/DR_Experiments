@@ -14,6 +14,7 @@ class Snake
     @vx = 0
     @vy = 0
     @tiles = Array.new(@h){Array.new(@w, 0)}
+    @foods = [[rand(@w), rand(@h)]]
     @snake = Array.new()
     @length = 5
 
@@ -51,6 +52,9 @@ class Snake
       for x in 0..(@w-1)
         args.outputs.solids << {x: (x*@s).to_i, y: (y*@s).to_i, w: @s, h: @s, r:@tiles[y][x], g:0, b:0}
       end
+    end
+    for c in @foods
+      args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:0, g:128, b:0}
     end
     for c in @snake
       args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:0, g:128, b:128}
