@@ -67,8 +67,10 @@ class Snake
     handle_keys args
     @x += @vx
     @y += @vy
-    if rand(32) > 20
+    if @foods.include?([@x,@y])
       @length += 1
+      @foods.delete([@x,@y])
+      @foods << [rand(@w), rand(@h)]
     end
     while @snake.length+1 > @length
       @snake.shift()
