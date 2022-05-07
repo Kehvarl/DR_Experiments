@@ -111,5 +111,3 @@ class Snake
     end
   end
 end
-
-# need random foodstuffs
