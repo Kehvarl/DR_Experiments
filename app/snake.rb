@@ -54,13 +54,13 @@ class Snake
       end
     end
     for c in @foods
-      args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:0, g:128, b:0}
+      args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/blue.png"}
     end
     for c in @snake
-      args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:0, g:128, b:128}
+      args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/green.png"}
     end
     c = @snake[-1]
-    args.outputs.solids << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, r:0, g:192, b:255}
+    args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/hexagon/green.png"}
   end
 
   def game_tick args
