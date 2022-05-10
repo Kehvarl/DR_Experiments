@@ -19,12 +19,16 @@ class Snake
     @length = 5
 
     for x in 0..(@w-1)
-      @tiles[0][x] = 255
-      @tiles[@h-1][x] = 255
+      if x < @w/2-4 or x > @w/2+4
+        @tiles[0][x] = 255
+        @tiles[@h-1][x] = 255
+      end
     end
     for y in 0..(@h-1)
-      @tiles[y][0] = 255
-      @tiles[y][@w-1] = 255
+      if y < @h/2-1 or y > @h/2+4
+        @tiles[y][0] = 255
+        @tiles[y][@w-1] = 255
+      end
     end
     args.state.game = :running
   end
@@ -67,10 +71,20 @@ class Snake
     handle_keys args
     @x += @vx
     @y += @vy
+    if @x <= 0
+      @x = @w-1
+    elsif @x >= @w
+      @x = 0
+    end
+    if @y <= 0
+      @y = @h-1
+    elsif @y >= @h
+      @y = 0
+    end
     if @foods.include?([@x,@y])
       @length += 1
       @foods.delete([@x,@y])
-      @foods << [rand(@w), rand(@h)]
+      @foods << [rand(@w), rand(@h)] # Need to check for edges
     end
     while @snake.length+1 > @length
       @snake.shift()
