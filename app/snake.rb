@@ -125,3 +125,5 @@ class Snake
     end
   end
 end
+
+# Up next: wandering enemies?
