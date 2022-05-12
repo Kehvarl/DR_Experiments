@@ -15,6 +15,7 @@ class Snake
     @vy = 0
     @tiles = Array.new(@h){Array.new(@w, 0)}
     @foods = [[rand(@w), rand(@h)]]
+    @enemies = [[rand(@w), rand(@h), [[-1,0],[1,0],[0,-1],[0,1]].sample]]
     @snake = Array.new()
     @length = 5
 
@@ -60,6 +61,34 @@ class Snake
     for c in @foods
       args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/blue.png"}
     end
+    e2 = []
+    for c in @enemies
+      x = c[0]
+      y = c[1]
+      vx = c[2][0]
+      vy = c[2][1]
+      args.outputs.sprites << {x: (x*@s).to_i, y: (y*@s).to_i, w: @s, h: @s, path:"sprites/circle/red.png"}
+      if @tiles[y][x+vx] > 0
+        vx = -vx
+      end
+      if @tiles[y+vy][x] > 0
+        vy = -vy
+      end
+      if x <= 0
+        x = @w-1
+      elsif x >= @w
+        x = 0
+      end
+      if y <= 0
+        y = @h-1
+      elsif y >= @h
+        y = 0
+      end
+      x += vx
+      y += vy
+      e2 << [x, y, [vx, vy]]
+    end
+    @enemies = e2
     for c in @snake
       args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/green.png"}
     end
