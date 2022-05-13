@@ -15,7 +15,8 @@ class Snake
     @vy = 0
     @tiles = Array.new(@h){Array.new(@w, 0)}
     @foods = [[rand(@w), rand(@h)]]
-    @enemies = [[rand(@w), rand(@h), [[-1,0],[1,0],[0,-1],[0,1]].sample], [rand(@w), rand(@h), [[-1,0],[1,0],[0,-1],[0,1]].sample]]
+    @enemies = []
+    @enemies << new_enemy
     @snake = Array.new()
     @length = 5
 
@@ -32,6 +33,10 @@ class Snake
       end
     end
     args.state.game = :running
+  end
+
+  def new_enemy
+    [rand(@w), rand(@h), [[-1,0],[1,0],[0,-1],[0,1]].sample]
   end
 
   def handle_keys args
