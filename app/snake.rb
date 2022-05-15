@@ -63,22 +63,31 @@ class Snake
         args.outputs.solids << {x: (x*@s).to_i, y: (y*@s).to_i, w: @s, h: @s, r:@tiles[y][x], g:0, b:0}
       end
     end
-    for c in @foods
+    @foods.each do |c|
       args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/blue.png"}
     end
+
+    @enemies.each do |c|
+      args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/red.png"}
+      args.outputs.labels << {x:32, y: 128, text: "Enemy x: #{c[0]}, y: #{c[1]}", g:128}
+    end
+
+    @snake.each do |c|
+      args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/green.png"}
+    end
+    c = @snake[-1]
+    args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/hexagon/green.png"}
+    args.outputs.labels << {x:32, y: 196, text: "Snake x: #{c[0]}, y: #{c[1]}", g:128}
+  end
+
+  def update_enemies
     e2 = []
     for c in @enemies
       x = c[0]
       y = c[1]
       vx = c[2][0]
       vy = c[2][1]
-      args.outputs.sprites << {x: (x*@s).to_i, y: (y*@s).to_i, w: @s, h: @s, path:"sprites/circle/red.png"}
-      if @tiles[y][x+vx] > 0
-        vx = -vx
-      end
-      if @tiles[y+vy][x] > 0
-        vy = -vy
-      end
+
       if x <= 0
         x = @w-1
       elsif x >= @w
@@ -89,20 +98,27 @@ class Snake
       elsif y >= @h
         y = 0
       end
+
+      if @tiles[y][x+vx] > 0
+        vx = -vx
+      end
+      if @tiles[y+vy][x] > 0
+        vy = -vy
+      end
+
       x += vx
       y += vy
       e2 << [x, y, [vx, vy]]
     end
     @enemies = e2
-    for c in @snake
-      args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/green.png"}
-    end
-    c = @snake[-1]
-    args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/hexagon/green.png"}
   end
 
   def game_tick args
     handle_keys args
+    if @vx == 0 and @vy == 0
+      return
+    end
+    update_enemies
     @x += @vx
     @y += @vy
     if @x <= 0
@@ -120,18 +136,16 @@ class Snake
       @foods.delete([@x,@y])
       @foods << [rand(@w), rand(@h)] # Need to check for edges
     end
-    while @snake.length+1 > @length
-      @snake.shift()
-    end
-    if @vx == 0 and @vy == 0
-      return
-    end
 
     if @tiles[@y][@x] > 0 or
         @snake.select { |s| s[0]==@x and s[1]==@y }.length > 0 or
         @enemies.select{|e| e[0]==@x and e[1]==@y }.length > 0
       args.state.game = :game_over
       return
+    end
+
+    while @snake.length+1 > @length
+      @snake.shift()
     end
     @snake << [@x, @y]
 
