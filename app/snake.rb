@@ -127,7 +127,9 @@ class Snake
       return
     end
 
-    if @tiles[@y][@x] > 0 or @snake.select { |s| s[0]==@x and s[1]==@y }.length > 0
+    if @tiles[@y][@x] > 0 or
+        @snake.select { |s| s[0]==@x and s[1]==@y }.length > 0 or
+        @enemies.select{|e| e[0]==@x and e[1]==@y }.length > 0
       args.state.game = :game_over
       return
     end
