@@ -36,7 +36,7 @@ class Snake
   end
 
   def new_enemy
-    [rand(@w), rand(@h), [[-1,0],[1,0],[0,-1],[0,1]].sample]
+    {x: rand(@w), y: rand(@h), v: [[-1,0],[1,0],[0,-1],[0,1]].sample}
   end
 
   def handle_keys args
@@ -68,8 +68,7 @@ class Snake
     end
 
     @enemies.each do |c|
-      args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/circle/red.png"}
-      args.outputs.labels << {x:32, y: 128, text: "Enemy x: #{c[0]}, y: #{c[1]}", g:128}
+      args.outputs.sprites << {x: (c.x*@s).to_i, y: (c.y*@s).to_i, w: @s, h: @s, path:"sprites/circle/red.png"}
     end
 
     @snake.each do |c|
@@ -77,16 +76,15 @@ class Snake
     end
     c = @snake[-1]
     args.outputs.sprites << {x: (c[0]*@s).to_i, y: (c[1]*@s).to_i, w: @s, h: @s, path:"sprites/hexagon/green.png"}
-    args.outputs.labels << {x:32, y: 196, text: "Snake x: #{c[0]}, y: #{c[1]}", g:128}
   end
 
   def update_enemies
     e2 = []
     for c in @enemies
-      x = c[0]
-      y = c[1]
-      vx = c[2][0]
-      vy = c[2][1]
+      x = c.x
+      y = c.y
+      vx = c.v[0]
+      vy = c.v[1]
 
       if x <= 0
         x = @w-1
@@ -108,7 +106,7 @@ class Snake
 
       x += vx
       y += vy
-      e2 << [x, y, [vx, vy]]
+      e2 << {x:x, y:y, v:[vx, vy]}
     end
     @enemies = e2
   end
@@ -139,7 +137,7 @@ class Snake
 
     if @tiles[@y][@x] > 0 or
         @snake.select { |s| s[0]==@x and s[1]==@y }.length > 0 or
-        @enemies.select{|e| e[0]==@x and e[1]==@y }.length > 0
+        @enemies.select{|e| e.x==@x and e.y==@y }.length > 0
       args.state.game = :game_over
       return
     end
