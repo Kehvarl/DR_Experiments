@@ -173,4 +173,5 @@ class Snake
     end
   end
 end
-# Up next: wandering enemies?
+# TODO: Refactor
+# TODO: Enemy collision detection broken
