@@ -173,5 +173,6 @@ class Snake
     end
   end
 end
+
 # TODO: Refactor
 # TODO: Enemy collision detection broken
