@@ -1,3 +1,12 @@
+class Entity
+  attr_accessor :x, :y, :vx, :vy
+
+  def initialize args
+    super
+    
+  end
+end
+
 class Snake
   attr_accessor :x, :y, :vx, :vy
   def initialize args
