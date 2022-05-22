@@ -1,9 +1,12 @@
 class Entity
   attr_accessor :x, :y, :vx, :vy
 
-  def initialize args
+  def initialize x, y, vx, vy
     super
-    
+    @x = x
+    @y = y
+    @vx = vx
+    @vy = vy
   end
 end
 
