@@ -10,6 +10,7 @@ class Entity
   end
 end
 
+
 class Snake
   attr_accessor :x, :y, :vx, :vy
   def initialize args
