@@ -8,6 +8,7 @@ class Entity
     @vx = vx
     @vy = vy
   end
+  
 end
 
 
