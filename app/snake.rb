@@ -8,9 +8,8 @@ class Entity
     @vx = vx
     @vy = vy
   end
-  
-end
 
+end
 
 class Snake
   attr_accessor :x, :y, :vx, :vy
